@@ -81,6 +81,10 @@ func (p *Plugin) getInvalidURLs(post *model.Post) []string {
 
 		protocol := string(postText[protocolStartIndex:procolEndIndex])
 		_, ok := set[protocol]
+		if !ok && (protocol == "ftp" || protocol == "mailto") {
+            invalidURLProtocols = append(invalidURLProtocols, protocol)
+            set[protocol] = true
+        }
 		if !ok && !isPlainText && (len(configuration.AllowedProtocolListLink) == 0 || !p.allowedProtocolsRegexLink.MatchString(protocol)) {
 			invalidURLProtocols = append(invalidURLProtocols, protocol)
 			set[protocol] = true
